@@ -1,0 +1,25 @@
+# Marigold wallet.
+#
+#   docker compose run --rm wallet
+#
+# `run`, not `up`: the wallet is an interactive terminal program, not a service.
+services:
+  wallet:
+    build:
+      # Builds straight from this repository — no clone needed.
+      context: https://github.com/marigoldcash/marigold_docker.git
+    image: marigold-wallet:latest
+    # Your notes live here. A named volume rather than a bind mount so it is
+    # not accidentally deleted with the directory you ran this from, and so it
+    # survives `docker compose down`.
+    volumes:
+      - marigold-data:/data
+    stdin_open: true
+    tty: true
+    # Only needed if you run the wallet's own node ('mynode start'). Without it
+    # the node still works but cannot accept incoming peer connections.
+    ports:
+      - "26211:26211"
+
+volumes:
+  marigold-data:
