@@ -23,3 +23,10 @@ services:
 
 volumes:
   marigold-data:
+    # Named explicitly. Without this, compose prefixes it with the directory
+    # you happened to run from — "myfolder_marigold-data" — so the backup
+    # command in the README would have quietly archived an empty volume, and
+    # moving the compose file elsewhere would have looked like losing your
+    # notes. The volume holding people's money should not be named after their
+    # current working directory.
+    name: marigold-data
