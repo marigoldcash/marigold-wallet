@@ -5,6 +5,13 @@
 # `run`, not `up`: the wallet is an interactive terminal program, not a service.
 services:
   wallet:
+    # The released binary is built for x86-64 Linux. Without this line Docker
+    # on an Apple Silicon Mac builds an arm64 image, drops an amd64 binary into
+    # it, and the container dies with "exec format error" before the wallet
+    # prints anything. Pinning the platform makes Docker run the amd64 image
+    # under emulation instead, which works everywhere at some cost in speed —
+    # noticeable only if you run the wallet's own node.
+    platform: linux/amd64
     build:
       # Builds straight from this repository — no clone needed.
       context: https://github.com/marigoldcash/marigold_docker.git

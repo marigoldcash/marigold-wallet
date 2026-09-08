@@ -16,6 +16,12 @@ docker compose run --rm wallet
 That is the whole install. The first run builds a small image — it downloads a
 binary, nothing is compiled — and drops you at the wallet prompt.
 
+**On an Apple Silicon Mac** the compose file pins `platform: linux/amd64`, so
+Docker runs the image under emulation. That is deliberate: the released binary
+is x86-64, and without the pin the container exits with `exec format error`
+before the wallet prints anything. Everything works; only the wallet's own node
+is noticeably slower. A native arm64 build is on the list.
+
 Then, in the wallet:
 
 ```
@@ -33,24 +39,40 @@ testnet money at <https://faucet.marigold.cash>.
 money**. It survives `docker compose down`. It does not survive
 `docker volume rm marigold-data`.
 
-Back it up:
+Back it up from inside the wallet:
 
-```sh
-docker run --rm -v marigold-data:/data -v "$PWD:/backup" debian:trixie-slim \
-  tar czf /backup/marigold-backup.tgz -C /data .marigold
+```
+wallet backup /data/marigold-backup.mgb
 ```
 
-Better still, run `note vault backup` in the wallet and keep the 24 words
-somewhere a fire will not reach. A copied file protects you from a mistake; the
-words protect you from a dead disk. Marigold notes are bearer instruments —
-lose them and they are gone, with no recovery and nobody to appeal to.
+That writes everything — the wallet, the note vault, every note key — into one
+file, encrypted under a passphrase you choose there and then. It is safe to
+keep somewhere you do not control: a cloud drive, a chat with yourself, a USB
+stick that is not yours. `wallet restore <file>` rebuilds it anywhere, and it
+needs that passphrase and nothing else.
+
+The file lands in the volume, so copy it out:
+
+```sh
+docker run --rm -v marigold-data:/data -v "$PWD:/out" debian:trixie-slim \
+  cp /data/marigold-backup.mgb /out/
+```
+
+Anyone with that file and its passphrase can spend your money. Treat it as
+cash — which is what it is.
+
+Do not rely on the 24 words alone. They unlock the vault, they are not a copy
+of it: with the words and no files you can recover your ledger balance and
+**none of your notes**. Nothing can derive a note, which is exactly what makes
+it cash. Lose the notes and they are gone, with no recovery and nobody to
+appeal to.
 
 ## Running your own node
 
 The wallet has a full node built in:
 
 ```
-mynode start
+node start
 ```
 
 Nobody then sees your address or which notes you hold — with a public node, the
