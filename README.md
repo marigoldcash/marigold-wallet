@@ -9,9 +9,14 @@ without notice.
 ## Run it
 
 ```sh
-curl -O https://raw.githubusercontent.com/marigoldcash/marigold_docker/main/docker-compose.yml
+curl -fsSLO https://raw.githubusercontent.com/marigoldcash/marigold_docker/main/docker-compose.yml
 docker compose run --rm wallet
 ```
+
+If that prints nothing, it worked. GitHub's CDN occasionally answers with a
+503 page, and without `-f` curl saves the error page *as* `docker-compose.yml`
+— you then get a YAML parse error that has nothing to do with the file. Run it
+again if it complains.
 
 That is the whole install. The first run builds a small image — it downloads a
 binary, nothing is compiled — and drops you at the wallet prompt.
