@@ -18,7 +18,13 @@ RUN chmod 0755 /usr/local/bin/marigold-cli
 
 # Not root. This process handles keys that ARE money, and a container that runs
 # as root gives a bug in it the run of the filesystem it can reach.
-RUN useradd --create-home --home-dir /data --uid 10001 marigold
+# 0755 on the home directory, not useradd's default 0700. The compose file
+# runs the container as the invoking user so that files written into the
+# mounted ~/.marigold stay owned by that person — and a 0700 /data owned by
+# uid 10001 means any other uid cannot even traverse into it to reach the
+# mount. Nothing sensitive lives in /data itself; the wallet is in the mount.
+RUN useradd --create-home --home-dir /data --uid 10001 marigold \
+ && chmod 0755 /data
 WORKDIR /data
 USER marigold
 

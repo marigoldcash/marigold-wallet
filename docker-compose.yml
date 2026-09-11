@@ -16,24 +16,23 @@ services:
       # Builds straight from this repository — no clone needed.
       context: https://github.com/marigoldcash/marigold_docker.git
     image: marigold-wallet:latest
-    # Your notes live here. A named volume rather than a bind mount so it is
-    # not accidentally deleted with the directory you ran this from, and so it
-    # survives `docker compose down`.
+    # Run as you, not as the image's own user, so the folder below stays
+    # readable and writable from your desktop. Override if your account is not
+    # 1000: MARIGOLD_UID=$(id -u) MARIGOLD_GID=$(id -g) docker compose run --rm wallet
+    user: "${MARIGOLD_UID:-1000}:${MARIGOLD_GID:-1000}"
+    # The same ~/.marigold the native wallet uses, so there is one set of keys
+    # on this machine rather than two. This used to be a named Docker volume
+    # living under /var/lib/docker/volumes/, where nobody would think to look
+    # and nobody would think to back up.
+    #
+    # Sharing is safe: the wallet takes an exclusive lock on the file it opens,
+    # and that lock is held in the kernel on the real inode — so a wallet open
+    # in the container refuses to open on the host, and the other way round.
     volumes:
-      - marigold-data:/data
+      - ${HOME}/.marigold:/data/.marigold
     stdin_open: true
     tty: true
-    # Only needed if you run the wallet's own node ('mynode start'). Without it
+    # Only needed if you run the wallet's own node ('node start'). Without it
     # the node still works but cannot accept incoming peer connections.
     ports:
       - "26211:26211"
-
-volumes:
-  marigold-data:
-    # Named explicitly. Without this, compose prefixes it with the directory
-    # you happened to run from — "myfolder_marigold-data" — so the backup
-    # command in the README would have quietly archived an empty volume, and
-    # moving the compose file elsewhere would have looked like losing your
-    # notes. The volume holding people's money should not be named after their
-    # current working directory.
-    name: marigold-data

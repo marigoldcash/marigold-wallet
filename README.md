@@ -9,6 +9,7 @@ without notice.
 ## Run it
 
 ```sh
+mkdir -p ~/.marigold
 curl -fsSLO https://raw.githubusercontent.com/marigoldcash/marigold_docker/main/docker-compose.yml
 docker compose run --rm wallet
 ```
@@ -38,11 +39,49 @@ connect
 `connect` reaches a node we run, so there is nothing else to set up. Get some
 testnet money at <https://faucet.marigold.cash>.
 
-## Your notes live in a Docker volume
+## Your notes live in `~/.marigold`
 
-`marigold-data`. It holds your wallet file and your note vault — **which is your
-money**. It survives `docker compose down`. It does not survive
-`docker volume rm marigold-data`.
+The same folder the native wallet uses, so there is one set of keys on this
+machine rather than two. It holds your wallet file and your note vault — **which
+is your money** — in an ordinary directory you can see, copy, and include in
+whatever you already back up.
+
+The container runs as your own user so the files stay yours. If your account is
+not uid 1000, tell it:
+
+```sh
+MARIGOLD_UID=$(id -u) MARIGOLD_GID=$(id -g) docker compose run --rm wallet
+```
+
+Sharing the folder is safe. The wallet takes an exclusive lock on whichever
+wallet file it opens, held by the kernel on the real file — so a wallet already
+open on the host refuses to open in the container, and the other way round. You
+get a plain message, not a corrupted wallet.
+
+**Upgrading from v0.2.1 or earlier?** Your wallet was in a Docker volume at
+`/var/lib/docker/volumes/marigold-data/_data`. Move it into the open — this
+never overwrites a wallet you already have, it renames the incoming one:
+
+```sh
+mkdir -p ~/.marigold
+docker run --rm -v marigold-data:/from -v "$HOME/.marigold:/to" debian:trixie-slim sh -c '
+  cd /from/.marigold 2>/dev/null || exit 0
+  for w in *.wallet; do
+    [ -e "$w" ] || continue
+    n=${w%.wallet}
+    t=$n
+    if [ -e "/to/$n.wallet" ]; then t="$n-docker-migrated"; echo "renaming $n -> $t (a wallet called $n is already there)"; fi
+    cp -a "$w" "/to/$t.wallet"
+    [ -d "$n.notes" ] && cp -a "$n.notes" "/to/$t.notes"
+    [ -d "$n.transactions" ] && cp -a "$n.transactions" "/to/$t.transactions"
+    echo "migrated $n as $t"
+  done'
+sudo chown -R "$(id -u):$(id -g)" ~/.marigold
+```
+
+Check your wallets are there with `wallet list` before running
+`docker volume rm marigold-data`. Anything renamed can be put back with
+`wallet rename` once you have decided which is which.
 
 Back it up from inside the wallet:
 
@@ -56,12 +95,8 @@ keep somewhere you do not control: a cloud drive, a chat with yourself, a USB
 stick that is not yours. `wallet restore <file>` rebuilds it anywhere, and it
 needs that passphrase and nothing else.
 
-The file lands in the volume, so copy it out:
-
-```sh
-docker run --rm -v marigold-data:/data -v "$PWD:/out" debian:trixie-slim \
-  cp /data/marigold-backup.mgb /out/
-```
+The file lands in `~/.marigold/marigold-backup.mgb`, on your own disk — nothing
+to copy out of a volume.
 
 Anyone with that file and its passphrase can spend your money. Treat it as
 cash — which is what it is.
