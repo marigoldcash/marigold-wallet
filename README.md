@@ -58,6 +58,12 @@ wallet file it opens, held by the kernel on the real file — so a wallet alread
 open on the host refuses to open in the container, and the other way round. You
 get a plain message, not a corrupted wallet.
 
+**Your wallet is one directory.** A wallet used to be a file with two folders
+beside it; it is now a single `NAME.wallet/` holding the keys, the notes and
+the history — one thing to copy, not three. The wallet does this itself the
+first time it opens, by renaming inside the same folder, so it is instant
+however much history there is.
+
 **Upgrading from v0.2.1 or earlier?** Your wallet was in a Docker volume at
 `/var/lib/docker/volumes/marigold-data/_data`. Move it into the open — this
 never overwrites a wallet you already have, it renames the incoming one:
@@ -106,6 +112,39 @@ of it: with the words and no files you can recover your ledger balance and
 **none of your notes**. Nothing can derive a note, which is exactly what makes
 it cash. Lose the notes and they are gone, with no recovery and nobody to
 appeal to.
+
+## Asking for a code before it spends
+
+```
+otp on
+```
+
+Enrols an authenticator app on your phone. After that, every spend, export or
+handover wants a six-digit code as well as your password.
+
+It protects a wallet that is already **open** — the machine you walked away
+from, the terminal someone else sits down at. It does not protect the wallet
+file: the code's secret lives inside that file under the same password, so
+whoever has both can generate their own codes. Your password and your
+twenty-four words are still what stands between a thief and your money.
+
+Turning it off takes a current code, or your twenty-four vault words if the
+phone is gone.
+
+## Mining with spare CPU
+
+If you are running the wallet's own node (below), it can mine:
+
+```
+mine start
+```
+
+It asks what share of the machine to use and defaults to half. The threads run
+at the lowest priority the system has, so they stand aside the moment you do
+anything else. `mine status` for the speed and what it has found.
+
+This needs your own node. Asking a public node for work would tell its
+operator which address your coins are paid to.
 
 ## Running your own node
 
