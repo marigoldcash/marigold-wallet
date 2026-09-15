@@ -49,11 +49,11 @@ marigold • 12.30 TMAGLD in notes ›
 ## Notes only, or with a ledger
 
 Most people never need the ledger. Notes are paid and received directly:
-`note request` prints a code for whoever is paying you, `note pay` pays one
-you were shown, and `exchange <address> <amount>` pays anyone who only has an
-address, straight from your notes in one transaction. Answer **n** to the
-wizard's question and the wallet has a vault and nothing else — no ledger
-address is ever derived.
+`pay 20` makes a code worth 20 to hand over, `receive <code>` takes one you
+were given, `request` prints a code for whoever is paying you, and
+`exchange <address> <amount>` pays anyone who only has an address, straight
+from your notes in one transaction. Answer **n** to the wizard's question and
+the wallet has a vault and nothing else — no ledger address is ever derived.
 
 A ledger is for two things: mining, and being paid by an exchange that only
 pays to an address. Keep one (the default), or add it later with
@@ -62,6 +62,27 @@ is nothing extra to back up.
 
 Without a ledger there is nowhere to put change, so `exchange` needs notes
 that make up the amount to within 0.01. The wallet says so when they do not.
+
+## Paying and being paid
+
+```
+pay 20
+```
+
+prints a code worth 20 — show it, send it, hand it over — and the wallet
+adds a 0.01 so the receiver can make it theirs; you pay, they receive. Fewest
+notes that cover it, a larger note split if needed. `pay <serial>` hands one
+particular note over the same way, and `pay <request-code>` pays a request
+you were shown with nothing to hand over. A code is cash: anyone who sees it
+can take it, so give it straight to the receiver, who types:
+
+```
+receive <code>
+```
+
+`request` prints a code for whoever is paying you and waits for the money;
+`history` lists what you have paid and received; `move 500` moves notes into
+another wallet on this machine; `mobile` puts notes on your phone.
 
 ## The technical side, off by default
 
