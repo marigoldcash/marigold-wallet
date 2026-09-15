@@ -28,16 +28,52 @@ is x86-64, and without the pin the container exits with `exec format error`
 before the wallet prints anything. Everything works; only the wallet's own node
 is noticeably slower. A native arm64 build is on the list.
 
-Then, in the wallet:
-
-```
-network testnet
-wallet create
-connect
-```
+Then, in the wallet, type what the note tells you to: `wallet create` the
+first time, `open` after that. The wizard asks one question worth a pause —
+**Keep a ledger account too? [Y/n]** — and shows you twenty-four words once.
+Then `connect`.
 
 `connect` reaches a node we run, so there is nothing else to set up. Get some
-testnet money at <https://faucet.marigold.cash>.
+testnet money at <https://faucet.marigold.cash>, and type `guide` for a
+walkthrough that reads the state of your wallet and only tells you what
+applies to you.
+
+The prompt shows what you hold in notes, and only that:
+
+```
+marigold • 12.30 TMAGLD in notes ›
+```
+
+`balance` has the rest.
+
+## Notes only, or with a ledger
+
+Most people never need the ledger. Notes are paid and received directly:
+`note request` prints a code for whoever is paying you, `note pay` pays one
+you were shown, and `exchange <address> <amount>` pays anyone who only has an
+address, straight from your notes in one transaction. Answer **n** to the
+wizard's question and the wallet has a vault and nothing else — no ledger
+address is ever derived.
+
+A ledger is for two things: mining, and being paid by an exchange that only
+pays to an address. Keep one (the default), or add it later with
+`account create bip32` — it comes from the same twenty-four words, so there
+is nothing extra to back up.
+
+Without a ledger there is nowhere to put change, so `exchange` needs notes
+that make up the amount to within 0.01. The wallet says so when they do not.
+
+## The technical side, off by default
+
+```
+advanced on
+```
+
+Off, the wallet reads like a wallet: `help` lists the everyday commands, no
+address is printed unasked, and an error is one plain line that says what to
+do next. On, `help` lists every command, addresses appear where they belong,
+and the reason behind an error is printed in full. `advanced off` puts it
+back; the choice is remembered.
 
 ## Your notes live in `~/.marigold`
 
@@ -148,7 +184,8 @@ operator which address your coins are paid to.
 
 ## Running your own node
 
-The wallet has a full node built in:
+The wallet has a full node built in. `connect` offers it, and `node start`
+starts it by hand:
 
 ```
 node start
@@ -157,6 +194,11 @@ node start
 Nobody then sees your address or which notes you hold — with a public node, the
 operator does. It takes a while to catch up and several gigabytes of disk. See
 <https://marigold.cash/faq> for what that choice actually costs.
+
+Once you have chosen your own node, the wallet remembers. The next time you
+open and say yes to **Connect now?**, it starts the node, says it is no use
+until it has caught up, and asks once whether to use a public node in the
+meantime. It never connects to a public node unasked.
 
 The compose file publishes port 26211 so your node can accept peers.
 
