@@ -207,6 +207,27 @@ anything else. `mine status` for the speed and what it has found.
 This needs the sync on this machine. Asking a public computer for work would
 tell its operator which address your coins are paid to.
 
+### As a service, without the wallet open
+
+The same binary runs as a miner on its own — no terminal, no wallet, just the network syncing on this machine and the miner paying to an address you give it:
+
+```sh
+MARIGOLD_MINE_TO=marigoldtest:your-address-here docker compose --profile miner up -d miner
+docker compose logs -f miner
+```
+
+`MARIGOLD_MINE_CPU` sets the share of the machine (default 50). Take the address from `address` in your wallet. The miner waits for the sync to catch up, then mines, and logs a line a minute about how it is going. Stop it with `docker compose --profile miner down`; it stops its threads and closes the database cleanly.
+
+A wallet started afterwards finds it: `connect` says *Found the Marigold miner running in the background on this machine* and uses its copy of the network instead of syncing a second one. From then on `mine start`, `mine stop` and `mine status` steer the background miner, and `mine status` shows where the rewards go — the address the miner was started with, which need not be this wallet's.
+
+Without Docker, the binary from the release does the same thing:
+
+```sh
+marigold-cli mine-to marigoldtest:your-address-here 50
+```
+
+It stays in the foreground and logs to stdout, so systemd looks after it. [systemd/marigold-miner.service](systemd/marigold-miner.service) is a unit to copy, with the address and the share on its `ExecStart` line. The number is the share of the machine, 1 to 100, and defaults to 50.
+
 ## The network
 
 ```

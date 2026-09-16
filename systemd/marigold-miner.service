@@ -1,0 +1,37 @@
+# Marigold miner as a service.
+#
+#   sudo cp marigold-cli /usr/local/bin/
+#   sudo useradd --system --create-home --home-dir /var/lib/marigold marigold
+#   sudo install -m 0644 marigold-miner.service /etc/systemd/system/
+#   sudo systemctl edit marigold-miner      # set your address and share (below)
+#   sudo systemctl enable --now marigold-miner
+#   journalctl -fu marigold-miner
+#
+# Replace the address on the ExecStart line with one from 'address' in your
+# wallet, and the percentage with the share of the machine to give it. The
+# threads run at the lowest priority the system has, so 100% still steps aside
+# for anything else.
+[Unit]
+Description=Marigold miner
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=marigold
+Environment=HOME=/var/lib/marigold
+ExecStart=/usr/local/bin/marigold-cli mine-to marigoldtest:REPLACE_WITH_YOUR_ADDRESS 50
+Restart=on-failure
+RestartSec=10
+# A clean stop: the miner stops its threads, then the node closes its database.
+KillSignal=SIGTERM
+TimeoutStopSec=90
+# The node's database and the wallet's ~/.marigold live under HOME.
+ReadWritePaths=/var/lib/marigold
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

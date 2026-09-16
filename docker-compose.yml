@@ -36,3 +36,32 @@ services:
     # the node still works but cannot accept incoming peer connections.
     ports:
       - "26211:26211"
+
+  # The miner as a service: no wallet, no terminal. Give it an address from
+  # 'address' in your wallet and a share of the machine, then
+  #
+  #   docker compose up -d miner
+  #   docker compose logs -f miner
+  #
+  # A wallet run afterwards ('docker compose run --rm wallet', then 'connect')
+  # finds the miner's copy of the network and steers the miner with 'mine
+  # start', 'mine stop' and 'mine status'. Both containers share
+  # ~/.marigold, which is what makes that work.
+  miner:
+    platform: linux/amd64
+    build:
+      context: https://github.com/marigoldcash/marigold_docker.git
+    image: marigold-wallet:latest
+    user: "${MARIGOLD_UID:-1000}:${MARIGOLD_GID:-1000}"
+    volumes:
+      - ${HOME}/.marigold:/data/.marigold
+    # The miner's RPC is bound to 127.0.0.1 inside the container. network_mode
+    # host puts the container on the machine's own loopback, so a wallet on
+    # the host — native or in its own container with the same setting — can
+    # reach it, and the node's p2p port 26211 is open to peers without a port
+    # mapping.
+    network_mode: host
+    command: ["mine-to", "${MARIGOLD_MINE_TO:?set MARIGOLD_MINE_TO to the address the rewards go to}", "--cpu", "${MARIGOLD_MINE_CPU:-50}"]
+    restart: unless-stopped
+    stop_grace_period: 90s
+    profiles: ["miner"]
