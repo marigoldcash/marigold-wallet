@@ -61,7 +61,9 @@ services:
     # reach it, and the node's p2p port 26211 is open to peers without a port
     # mapping.
     network_mode: host
-    command: ["mine-to", "${MARIGOLD_MINE_TO:?set MARIGOLD_MINE_TO to the address the rewards go to}", "--cpu", "${MARIGOLD_MINE_CPU:-50}"]
+    # MARIGOLD_MINE_TO is the address the rewards go to; without it the miner
+    # refuses the placeholder and says so.
+    command: ["mine-to", "${MARIGOLD_MINE_TO:-marigoldtest:REPLACE_WITH_YOUR_ADDRESS}", "${MARIGOLD_MINE_CPU:-50}"]
     restart: unless-stopped
     stop_grace_period: 90s
     profiles: ["miner"]
