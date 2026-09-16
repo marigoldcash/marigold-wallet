@@ -29,9 +29,9 @@ before the wallet prints anything. Everything works; only the wallet's own node
 is noticeably slower. A native arm64 build is on the list.
 
 Then, in the wallet, type what the note tells you to: `wallet create` the
-first time, `open` after that. The wizard asks one question worth a pause —
-**Keep a ledger account too? [Y/n]** — and shows you twenty-four words once.
-Then `connect`.
+first time, `open` after that. It asks for a name and a password, and one
+question worth a pause — **Keep a ledger account too? [Y/n]**. Then
+`connect`.
 
 `connect` reaches a node we run, so there is nothing else to set up. Get some
 testnet money at <https://faucet.marigold.cash>, and type `guide` for a
@@ -164,11 +164,12 @@ to copy out of a volume.
 Anyone with that file and its passphrase can spend your money. Treat it as
 cash — which is what it is.
 
-Do not rely on the 24 words alone. They unlock the vault, they are not a copy
-of it: with the words and no files you can recover your ledger balance and
-**none of your notes**. Nothing can derive a note, which is exactly what makes
-it cash. Lose the notes and they are gone, with no recovery and nobody to
-appeal to.
+Your password and that backup are what bring the wallet back. Nothing else
+can, and there is nobody to appeal to. Prefer paper? `note vault words` prints
+24 recovery words that, together with a copy of the vault files, rebuild the
+wallet without the password — the words alone recover your ledger balance and
+**none of your notes**, because nothing can derive a note, which is exactly
+what makes it cash.
 
 ## Asking for a code before it spends
 
