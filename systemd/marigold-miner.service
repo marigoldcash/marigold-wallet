@@ -10,7 +10,8 @@
 # Replace the address on the ExecStart line with one from 'address' in your
 # wallet, and the percentage with the share of the machine to give it. The
 # threads run at the lowest priority the system has, so 100% still steps aside
-# for anything else.
+# for anything else. On a machine that already runs marigoldd, add
+# '--node grpc://127.0.0.1:26210' to the ExecStart line.
 [Unit]
 Description=Marigold miner
 After=network-online.target

@@ -226,7 +226,7 @@ Without Docker, the binary from the release does the same thing:
 marigold-cli mine-to marigoldtest:your-address-here 50
 ```
 
-`marigold-cli --help` explains this on one screen. It stays in the foreground and logs to stdout, so systemd looks after it. [systemd/marigold-miner.service](systemd/marigold-miner.service) is a unit to copy, with the address and the share on its `ExecStart` line. The number is the share of the machine, 1 to 100, and defaults to 50.
+`marigold-cli --help` explains this on one screen. It stays in the foreground and logs to stdout, so systemd looks after it. [systemd/marigold-miner.service](systemd/marigold-miner.service) is a unit to copy, with the address and the share on its `ExecStart` line. The number is the share of the machine, 1 to 100, and defaults to 50. On a machine that already runs a marigoldd, add `--node grpc://127.0.0.1:26210` (a marigoldd's default RPC) and the miner uses that node instead of syncing one of its own; a wallet cannot steer it then, only the log shows how it is going.
 
 ## The network
 
