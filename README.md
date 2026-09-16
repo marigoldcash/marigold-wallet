@@ -236,7 +236,7 @@ The phone is a remote; the wallet stays at home. Make a bot of your own in Teleg
 mobile telegram <token>
 ```
 
-It asks for a PIN the bot will want before paying, and shows a pairing code. Keep the wallet open as a service, with the password in a file only you can read:
+It asks for a PIN the bot will want before paying, and shows a pairing code. From then on the bot is answered whenever that wallet is open: in your normal terminal session, for as long as it stays open, or with no terminal at all as a service, with the password in a file only you can read:
 
 ```sh
 umask 077; echo "your wallet password" > ~/.marigold/wallet.pw
