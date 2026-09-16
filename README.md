@@ -228,6 +228,16 @@ marigold-cli mine-to marigoldtest:your-address-here 50
 
 `marigold-cli --help` explains this on one screen. It stays in the foreground and logs to stdout, so systemd looks after it. [systemd/marigold-miner.service](systemd/marigold-miner.service) is a unit to copy, with the address and the share on its `ExecStart` line. The number is the share of the machine, 1 to 100, and defaults to 50. On a machine that already runs a marigoldd, add `--node grpc://127.0.0.1:26210` (a marigoldd's default RPC) and the miner uses that node instead of syncing one of its own; a wallet cannot steer it then, only the log shows how it is going.
 
+## Paying someone who is not there yet
+
+`receive key` makes a key of yours to hand out, like a phone number; `receive key bob` makes one just for Bob, which names him in `history` and cannot be compared with anyone else's. Whoever has your key pays you with
+
+```
+pay 5 marigoldkey:…          (three days by default; 'for 1 day', 'for 2 weeks')
+```
+
+and gives you the code it prints. The money is theirs to send and yours alone to take, with `receive` and the code, until the lock lapses; if you never take it, it comes back to them by itself. Nobody else, the payer included, can spend it in between. From the phone: `/key` for a key, `/pay 5 marigoldkey:…` to pay to one.
+
 ## Your wallet on your phone: a Telegram bot
 
 The phone is a remote; the wallet stays at home. Make a bot of your own in Telegram (BotFather, `/newbot`, copy the token), then in your wallet:
