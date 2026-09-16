@@ -11,7 +11,7 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends ca-certificates \
  && rm -rf /var/lib/apt/lists/*
 
-ARG VERSION=v0.2.16
+ARG VERSION=v0.2.17
 ARG REPO=marigoldcash/marigold_docker
 ADD https://github.com/${REPO}/releases/download/${VERSION}/marigold-cli /usr/local/bin/marigold-cli
 RUN chmod 0755 /usr/local/bin/marigold-cli

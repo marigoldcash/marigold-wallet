@@ -226,7 +226,7 @@ Without Docker, the binary from the release does the same thing:
 marigold-cli mine-to marigoldtest:your-address-here 50
 ```
 
-It stays in the foreground and logs to stdout, so systemd looks after it. [systemd/marigold-miner.service](systemd/marigold-miner.service) is a unit to copy, with the address and the share on its `ExecStart` line. The number is the share of the machine, 1 to 100, and defaults to 50.
+`marigold-cli --help` explains this on one screen. It stays in the foreground and logs to stdout, so systemd looks after it. [systemd/marigold-miner.service](systemd/marigold-miner.service) is a unit to copy, with the address and the share on its `ExecStart` line. The number is the share of the machine, 1 to 100, and defaults to 50.
 
 ## The network
 
