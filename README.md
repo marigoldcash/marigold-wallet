@@ -33,7 +33,10 @@ first time, `open` after that. It asks for a name and a password, and one
 question worth a pause — **Keep a ledger account too? [Y/n]**. Then
 `connect`.
 
-`connect` reaches a node we run, so there is nothing else to set up. Get some
+`connect` starts syncing a copy of the network on this machine — nobody else
+then sees which notes you ask about. The first sync takes a while, and until
+it has caught up nothing can be seen or paid, so the wallet asks once whether
+to use a public computer meanwhile; it never does that unasked. Get some
 testnet money at <https://faucet.marigold.cash>, and type `guide` for a
 walkthrough that reads the state of your wallet and only tells you what
 applies to you.
@@ -191,7 +194,7 @@ phone is gone.
 
 ## Mining with spare CPU
 
-If you are running the wallet's own node (below), it can mine:
+Once the network is synced on this machine (above), the wallet can mine:
 
 ```
 mine start
@@ -201,28 +204,23 @@ It asks what share of the machine to use and defaults to half. The threads run
 at the lowest priority the system has, so they stand aside the moment you do
 anything else. `mine status` for the speed and what it has found.
 
-This needs your own node. Asking a public node for work would tell its
-operator which address your coins are paid to.
+This needs the sync on this machine. Asking a public computer for work would
+tell its operator which address your coins are paid to.
 
-## Running your own node
-
-The wallet has a full node built in. `connect` offers it, and `node start`
-starts it by hand:
+## The network
 
 ```
-node start
+connect
 ```
 
-Nobody then sees your address or which notes you hold — with a public node, the
-operator does. It takes a while to catch up and several gigabytes of disk. See
-<https://marigold.cash/faq> for what that choice actually costs.
+syncs a copy of the network on this machine. Nobody then sees your address or
+which notes you hold — with a public computer, its operator does. It takes a
+while to catch up and several gigabytes of disk; `connect status` shows
+progress, `disconnect` stops it. See <https://marigold.cash/faq> for what the
+choice actually costs. `connect public` uses a public computer instead, for
+whoever wants that.
 
-Once you have chosen your own node, the wallet remembers. The next time you
-open and say yes to **Connect now?**, it starts the node, says it is no use
-until it has caught up, and asks once whether to use a public node in the
-meantime. It never connects to a public node unasked.
-
-The compose file publishes port 26211 so your node can accept peers.
+The compose file publishes port 26211 so your copy of the network can accept peers.
 
 ## What is in the image
 
