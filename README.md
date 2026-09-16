@@ -228,6 +228,25 @@ marigold-cli mine-to marigoldtest:your-address-here 50
 
 `marigold-cli --help` explains this on one screen. It stays in the foreground and logs to stdout, so systemd looks after it. [systemd/marigold-miner.service](systemd/marigold-miner.service) is a unit to copy, with the address and the share on its `ExecStart` line. The number is the share of the machine, 1 to 100, and defaults to 50. On a machine that already runs a marigoldd, add `--node grpc://127.0.0.1:26210` (a marigoldd's default RPC) and the miner uses that node instead of syncing one of its own; a wallet cannot steer it then, only the log shows how it is going.
 
+## Your wallet on your phone: a Telegram bot
+
+The phone is a remote; the wallet stays at home. Make a bot of your own in Telegram (BotFather, `/newbot`, copy the token), then in your wallet:
+
+```
+mobile telegram <token>
+```
+
+It asks for a PIN the bot will want before paying, and shows a pairing code. Keep the wallet open as a service, with the password in a file only you can read:
+
+```sh
+umask 077; echo "your wallet password" > ~/.marigold/wallet.pw
+marigold-cli serve <wallet name> --password-file ~/.marigold/wallet.pw
+```
+
+Send your bot `/start <pairing code>` once. From then on, in that chat: `/balance`, `/pay 5` (asks the PIN, answers with a code to hand over), `/receive <code>` or simply paste any code you were given, `/request 5`, `/history`, `/status`. One Telegram user is paired; everyone else is ignored. There is a daily limit, 100 by default, `mobile telegram limit <amount>` changes it. Three wrong PINs lock the bot until the service restarts.
+
+The service runs in the foreground and logs to stdout; [systemd/marigold-wallet.service](systemd/marigold-wallet.service) is a unit to copy. `--mine 50` on the same command mines to the wallet's own address too. This is a hot wallet on that machine: whoever can read the password file can spend. Turn on two-step verification in Telegram, since the paired account now moves money and Telegram accounts recover by SMS otherwise.
+
 ## The network
 
 ```

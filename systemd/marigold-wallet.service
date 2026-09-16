@@ -1,0 +1,37 @@
+# Marigold wallet as a service: open, syncing, answering your Telegram bot.
+#
+#   sudo cp marigold-cli /usr/local/bin/
+#   sudo useradd --system --create-home --home-dir /var/lib/marigold marigold
+#   # create the wallet and pair the bot as that user first:
+#   sudo -u marigold HOME=/var/lib/marigold marigold-cli      ('wallet create', 'mobile telegram <token>')
+#   sudo -u marigold sh -c 'umask 077; echo "the wallet password" > /var/lib/marigold/wallet.pw'
+#   sudo install -m 0644 marigold-wallet.service /etc/systemd/system/
+#   sudo systemctl edit marigold-wallet         # the wallet's name on the ExecStart line
+#   sudo systemctl enable --now marigold-wallet
+#   journalctl -fu marigold-wallet
+#
+# The password file makes this a hot wallet on this machine: whoever can read
+# that file, or this process's memory, can spend. Keep the machine yours.
+# '--mine 50' on the ExecStart line mines to the wallet's own address as well.
+[Unit]
+Description=Marigold wallet service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=marigold
+Environment=HOME=/var/lib/marigold
+ExecStart=/usr/local/bin/marigold-cli serve REPLACE_WITH_WALLET_NAME --password-file /var/lib/marigold/wallet.pw
+Restart=on-failure
+RestartSec=10
+KillSignal=SIGTERM
+TimeoutStopSec=90
+ReadWritePaths=/var/lib/marigold
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
