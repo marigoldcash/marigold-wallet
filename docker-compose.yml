@@ -16,10 +16,12 @@ services:
       # Builds straight from this repository — no clone needed.
       context: https://github.com/marigoldcash/marigold_docker.git
     image: marigold-wallet:latest
-    # Run as you, not as the image's own user, so the folder below stays
-    # readable and writable from your desktop. Override if your account is not
-    # 1000: MARIGOLD_UID=$(id -u) MARIGOLD_GID=$(id -g) docker compose run --rm wallet
-    user: "${MARIGOLD_UID:-1000}:${MARIGOLD_GID:-1000}"
+    # The wallet runs as whoever owns the folder below on your machine, so the
+    # files stay yours — on Linux and on a Mac, whatever your account's uid.
+    # To pick a different account: MARIGOLD_UID=$(id -u) MARIGOLD_GID=$(id -g) docker compose run --rm wallet
+    environment:
+      MARIGOLD_UID: ${MARIGOLD_UID:-}
+      MARIGOLD_GID: ${MARIGOLD_GID:-}
     # The same ~/.marigold the native wallet uses, so there is one set of keys
     # on this machine rather than two. This used to be a named Docker volume
     # living under /var/lib/docker/volumes/, where nobody would think to look
@@ -52,7 +54,9 @@ services:
     build:
       context: https://github.com/marigoldcash/marigold_docker.git
     image: marigold-wallet:latest
-    user: "${MARIGOLD_UID:-1000}:${MARIGOLD_GID:-1000}"
+    environment:
+      MARIGOLD_UID: ${MARIGOLD_UID:-}
+      MARIGOLD_GID: ${MARIGOLD_GID:-}
     volumes:
       - ${HOME}/.marigold:/data/.marigold
     # The miner's RPC is bound to 127.0.0.1 inside the container. network_mode

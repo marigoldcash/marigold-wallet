@@ -11,7 +11,7 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends ca-certificates \
  && rm -rf /var/lib/apt/lists/*
 
-ARG VERSION=v0.2.28
+ARG VERSION=v0.2.29
 ARG REPO=marigoldcash/marigold_docker
 ADD https://github.com/${REPO}/releases/download/${VERSION}/marigold-cli /usr/local/bin/marigold-cli
 RUN chmod 0755 /usr/local/bin/marigold-cli
@@ -25,12 +25,11 @@ RUN chmod 0755 /usr/local/bin/marigold-cli
 # mount. Nothing sensitive lives in /data itself; the wallet is in the mount.
 RUN useradd --create-home --home-dir /data --uid 10001 marigold \
  && chmod 0755 /data
+COPY entrypoint.sh /usr/local/bin/marigold-entrypoint
+RUN chmod 0755 /usr/local/bin/marigold-entrypoint
 WORKDIR /data
-USER marigold
-
-# HOME drives where the wallet keeps everything: /data/.marigold holds the
-# wallet file, the note vault, and the embedded node's chain data if you run
-# one. Mount a volume there or your notes die with the container.
+# The container starts as root only long enough for the entrypoint to see who
+# owns the mounted ~/.marigold and become that user; the wallet itself never
+# runs as root. See entrypoint.sh.
 ENV HOME=/data
-
-ENTRYPOINT ["/usr/local/bin/marigold-cli"]
+ENTRYPOINT ["/usr/local/bin/marigold-entrypoint"]
