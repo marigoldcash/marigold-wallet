@@ -108,9 +108,8 @@ whatever you already back up.
 
 The container runs as whoever owns that folder on your machine, so the files
 stay yours — on Linux and on a Mac alike, whatever your account's uid. If the
-folder does not exist yet, Docker creates it and the wallet hands it to uid
-1000, the first account on most Linux desktops. To choose the account
-yourself:
+folder does not exist yet, Docker creates it, and the wallet hands it to the
+owner of the compose file, which is you. To choose the account yourself:
 
 ```sh
 MARIGOLD_UID=$(id -u) MARIGOLD_GID=$(id -g) docker compose run --rm wallet

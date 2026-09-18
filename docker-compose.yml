@@ -32,6 +32,11 @@ services:
     # in the container refuses to open on the host, and the other way round.
     volumes:
       - ${HOME}/.marigold:/data/.marigold
+      # This file, read-only, so the container can see who you are: when the
+      # folder above does not exist yet, Docker creates it as root, and the
+      # wallet then hands it to the owner of this file — you — rather than
+      # guessing. Nothing is read from it.
+      - ./docker-compose.yml:/run/marigold/owner:ro
     stdin_open: true
     tty: true
     # Only needed if you run the wallet's own node ('node start'). Without it
@@ -59,6 +64,7 @@ services:
       MARIGOLD_GID: ${MARIGOLD_GID:-}
     volumes:
       - ${HOME}/.marigold:/data/.marigold
+      - ./docker-compose.yml:/run/marigold/owner:ro
     # The miner's RPC is bound to 127.0.0.1 inside the container. network_mode
     # host puts the container on the machine's own loopback, so a wallet on
     # the host — native or in its own container with the same setting — can
