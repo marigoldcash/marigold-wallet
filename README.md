@@ -1,12 +1,41 @@
-# Marigold wallet — Docker
+# Marigold wallet
 
-Digital cash in fixed-denomination bearer notes. This repository packages the
-wallet so you can try it without building anything.
+Digital cash in fixed-denomination bearer notes. This repository is where you get the wallet without building anything: a binary for your machine from the [releases](https://github.com/marigoldcash/marigold-wallet/releases), or a Docker image that fetches one for you.
+
+The wallet is built from the [Marigold source](https://github.com/marigoldcash/marigold), which is public. Every release here is cut from a tagged version of that code base, and the per-platform binaries on it are built by that repository's [Wallet binaries](https://github.com/marigoldcash/marigold/actions/workflows/binaries.yaml) GitHub Actions workflow on GitHub's own Linux, Windows and macOS runners, so what you download was compiled from the source you can read, on a machine nobody here controls.
 
 **Testnet only.** The money is worthless by design and the network may be reset
 without notice.
 
 ## Run it
+
+Two ways. The binary is the simpler one; Docker suits a machine you would rather not put a new program on.
+
+### The binary
+
+Download the one for your machine from the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest):
+
+| File | For |
+| --- | --- |
+| `marigold-cli-linux-x86_64` | Linux, 64-bit Intel or AMD |
+| `marigold-cli-macos-arm64` | Apple Silicon Mac |
+| `marigold-cli-macos-x86_64` | Intel Mac |
+| `marigold-cli-macos-universal` | Either Mac, one file, twice the size |
+| `marigold-cli-windows-x86_64.exe` | Windows, 64-bit |
+| `marigold-cli` | Linux x86-64 again, the build the release was cut with; it is what the Docker image fetches |
+
+On Linux or a Mac, make it executable and run it:
+
+```sh
+chmod +x marigold-cli-linux-x86_64
+./marigold-cli-linux-x86_64
+```
+
+The binaries are unsigned. A Mac stops the first launch: allow it under System Settings, Privacy and Security, then run it again. Windows shows a SmartScreen notice; More info, then Run anyway. That is the price of not paying Apple and Microsoft for certificates while this is a testnet.
+
+The wallet keeps everything in `~/.marigold`, the same folder Docker uses, so you can switch between the two later. Then carry on at *In the wallet* below.
+
+### Docker
 
 ```sh
 mkdir -p ~/.marigold
@@ -23,12 +52,15 @@ That is the whole install. The first run builds a small image — it downloads a
 binary, nothing is compiled — and drops you at the wallet prompt.
 
 **On an Apple Silicon Mac** the compose file pins `platform: linux/amd64`, so
-Docker runs the image under emulation. That is deliberate: the released binary
+Docker runs the image under emulation. That is deliberate: the binary in the image
 is x86-64, and without the pin the container exits with `exec format error`
 before the wallet prints anything. Everything works; only the wallet's own node
-is noticeably slower. A native arm64 build is on the list.
+is noticeably slower. For full speed on a Mac, skip Docker and run the native
+`marigold-cli-macos-arm64` from the release instead.
 
-Then, in the wallet, type what the note tells you to: `wallet create` the
+### In the wallet
+
+Type what the note tells you to: `wallet create` the
 first time, `open` after that. It asks for a name and a password, and one
 question worth a pause — **Keep a ledger account too? [Y/n]**. Then
 `connect`.
@@ -276,15 +308,15 @@ The compose file publishes port 26211 so your copy of the network can accept pee
 
 ## What is in the image
 
-`debian:trixie-slim`, CA certificates, and the wallet binary from this
+`debian:trixie-slim`, CA certificates, and the Linux wallet binary from this
 repository's [releases](https://github.com/marigoldcash/marigold-wallet/releases).
 It runs as an unprivileged user, not root.
 
-The wallet's source is not public yet. When it is, this image will be built from
-source rather than from a published binary.
+The image downloads the release binary rather than compiling anything, so building it takes seconds. If you would rather build the wallet yourself, the source is at [marigoldcash/marigold](https://github.com/marigoldcash/marigold); the workflow file there shows the exact `cargo build` line the released binaries come from.
 
 ## Links
 
+- [Source code](https://github.com/marigoldcash/marigold)
 - [Litepaper](https://marigold.cash/litepaper/)
 - [Questions](https://marigold.cash/faq)
 - [Faucet](https://faucet.marigold.cash)
