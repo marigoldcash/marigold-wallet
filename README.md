@@ -10,7 +10,7 @@ without notice.
 
 ```sh
 mkdir -p ~/.marigold
-curl -fsSLO https://raw.githubusercontent.com/marigoldcash/marigold_docker/main/docker-compose.yml
+curl -fsSLO https://raw.githubusercontent.com/marigoldcash/marigold-wallet/main/docker-compose.yml
 docker compose run --rm wallet
 ```
 
@@ -277,7 +277,7 @@ The compose file publishes port 26211 so your copy of the network can accept pee
 ## What is in the image
 
 `debian:trixie-slim`, CA certificates, and the wallet binary from this
-repository's [releases](https://github.com/marigoldcash/marigold_docker/releases).
+repository's [releases](https://github.com/marigoldcash/marigold-wallet/releases).
 It runs as an unprivileged user, not root.
 
 The wallet's source is not public yet. When it is, this image will be built from

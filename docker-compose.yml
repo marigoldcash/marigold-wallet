@@ -14,7 +14,7 @@ services:
     platform: linux/amd64
     build:
       # Builds straight from this repository — no clone needed.
-      context: https://github.com/marigoldcash/marigold_docker.git
+      context: https://github.com/marigoldcash/marigold-wallet.git
     image: marigold-wallet:latest
     # The wallet runs as whoever owns the folder below on your machine, so the
     # files stay yours — on Linux and on a Mac, whatever your account's uid.
@@ -57,7 +57,7 @@ services:
   miner:
     platform: linux/amd64
     build:
-      context: https://github.com/marigoldcash/marigold_docker.git
+      context: https://github.com/marigoldcash/marigold-wallet.git
     image: marigold-wallet:latest
     environment:
       MARIGOLD_UID: ${MARIGOLD_UID:-}

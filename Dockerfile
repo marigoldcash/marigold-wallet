@@ -12,7 +12,7 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 ARG VERSION=v0.2.34
-ARG REPO=marigoldcash/marigold_docker
+ARG REPO=marigoldcash/marigold-wallet
 ADD https://github.com/${REPO}/releases/download/${VERSION}/marigold-cli /usr/local/bin/marigold-cli
 RUN chmod 0755 /usr/local/bin/marigold-cli
 
