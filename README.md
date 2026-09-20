@@ -13,7 +13,7 @@ Two ways. The binary is the simpler one; Docker suits a machine you would rather
 
 ### The binary
 
-Download the one for your machine from the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest):
+Download the one for your machine from the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest). A release is named after the wallet inside it: v2.45.208 is what the front note shows and what `marigold-cli --version` prints, so you can always tell whether you are on the latest.
 
 | File | For |
 | --- | --- |
