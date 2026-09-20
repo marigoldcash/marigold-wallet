@@ -119,6 +119,16 @@ receive <code>
 `history` lists what you have paid and received; `move 500` moves notes into
 another wallet on this machine; `mobile` puts notes on your phone.
 
+### The receipt
+
+When you pay a request, the wallet ends with a receipt: a `marigoldreceipt:`
+code, printed as text and as a QR. Give it to whoever asked for the payment. It
+is a pointer, not the money and not the proof: it names the transaction, the
+request it answers and the amount, so a shop can find your payment in one
+lookup instead of watching the network for it. Nothing in it is secret, and
+nothing in it is taken on trust — the shop still checks the chain. If the
+shop has no field for it, ignore it; the payment stands on its own.
+
 ## The technical side, off by default
 
 ```
