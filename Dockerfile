@@ -11,7 +11,7 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends ca-certificates \
  && rm -rf /var/lib/apt/lists/*
 
-ARG VERSION=v2.65.271
+ARG VERSION=v2.66.272
 ARG REPO=marigoldcash/marigold-wallet
 ADD https://github.com/${REPO}/releases/download/${VERSION}/marigold-cli /usr/local/bin/marigold-cli
 RUN chmod 0755 /usr/local/bin/marigold-cli
