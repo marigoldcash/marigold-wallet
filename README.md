@@ -2,7 +2,7 @@
 
 Digital cash in fixed-denomination bearer notes. This repository is where you get the wallet without building anything: a binary for your machine from the [releases](https://github.com/marigoldcash/marigold-wallet/releases), or a Docker image that fetches one for you.
 
-The wallet is built from the [Marigold source](https://github.com/marigoldcash/marigold), which is public. Every release here is cut from that code base at the same tag: v2.62.268 here is [v2.62.268 there](https://github.com/marigoldcash/marigold/tree/v2.62.268), one number for the wallet, its release and its source. And the per-platform binaries on it are built by that repository's [Wallet binaries](https://github.com/marigoldcash/marigold/actions/workflows/binaries.yaml) GitHub Actions workflow on GitHub's own Linux, Windows and macOS runners, so what you download was compiled from the source you can read, on a machine nobody here controls.
+The wallet is built from the [Marigold source](https://github.com/marigoldcash/marigold), which is public. Every release here is cut from that code base at the same tag: v2.63.269 here is [v2.63.269 there](https://github.com/marigoldcash/marigold/tree/v2.63.269), one number for the wallet, its release and its source. And the per-platform binaries on it are built by that repository's [Wallet binaries](https://github.com/marigoldcash/marigold/actions/workflows/binaries.yaml) GitHub Actions workflow on GitHub's own Linux, Windows and macOS runners, so what you download was compiled from the source you can read, on a machine nobody here controls.
 
 **Testnet only.** The money is worthless by design and the network may be reset
 without notice.
@@ -13,7 +13,7 @@ Two ways. The binary is the simpler one; Docker suits a machine you would rather
 
 ### The binary
 
-Download the one for your machine from the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest). A release is named after the wallet inside it: v2.62.268 is what the front note shows and what `marigold-cli --version` prints, so you can always tell whether you are on the latest.
+Download the one for your machine from the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest). A release is named after the wallet inside it: v2.63.269 is what the front note shows and what `marigold-cli --version` prints, so you can always tell whether you are on the latest.
 
 | File | For |
 | --- | --- |
@@ -333,4 +333,4 @@ The image downloads the release binary rather than compiling anything, so buildi
 
 ## Desktop wallet
 
-The same wallet with screens instead of commands: open your wallet, see the balance, pay a request code, make a request and watch it get paid. Download `marigold-wallet-<platform>` from the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest), the same version as the terminal wallet, and start it. It opens the wallets the terminal wallet made; creating one still happens there for now (`wallet create`). On Linux it needs WebKitGTK 4.1, which every GNOME desktop has (`libwebkit2gtk-4.1-0` on Debian and Ubuntu); on Windows 10 and 11 and on macOS nothing extra. The builds are unsigned, like the terminal wallet's.
+The same wallet with screens instead of commands. Download `marigold-wallet-<platform>` from the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest), the same version as the terminal wallet, and start it. It creates a wallet (the 24 words are shown once, to write down) or restores one from its words, opens the wallets the terminal wallet made, shows the balance and history, names any code you paste before anything happens (a request to pay, notes handed to you, a receipt), pays and takes, makes a request with its QR and shows "Paid" when the money lands, hands notes over as a code, and mines with spare CPU once your own sync is done. On Linux it needs WebKitGTK 4.1, which every GNOME desktop has (`libwebkit2gtk-4.1-0` on Debian and Ubuntu); on Windows 10 and 11 and on macOS nothing extra. The builds are unsigned, like the terminal wallet's.
