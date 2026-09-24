@@ -2,7 +2,7 @@
 
 Digital cash in fixed-denomination bearer notes. This repository is where you get the wallet without building anything: a binary for your machine from the [releases](https://github.com/marigoldcash/marigold-wallet/releases), or a Docker image that fetches one for you.
 
-The wallet is built from the [Marigold source](https://github.com/marigoldcash/marigold), which is public. Every release here is cut from that code base at the same tag: v2.66.272 here is [v2.66.272 there](https://github.com/marigoldcash/marigold/tree/v2.66.272), one number for the wallet, its release and its source. And the per-platform binaries on it are built by that repository's [Wallet binaries](https://github.com/marigoldcash/marigold/actions/workflows/binaries.yaml) GitHub Actions workflow on GitHub's own Linux, Windows and macOS runners, so what you download was compiled from the source you can read, on a machine nobody here controls.
+The wallet is built from the [Marigold source](https://github.com/marigoldcash/marigold), which is public. Every release here is cut from that code base at the same tag: v2.67.276 here is [v2.67.276 there](https://github.com/marigoldcash/marigold/tree/v2.67.276), one number for the wallet, its release and its source. And the per-platform binaries on it are built by that repository's [Wallet binaries](https://github.com/marigoldcash/marigold/actions/workflows/binaries.yaml) GitHub Actions workflow on GitHub's own Linux, Windows and macOS runners, so what you download was compiled from the source you can read, on a machine nobody here controls.
 
 **Testnet only.** The money is worthless by design and the network may be reset
 without notice.
@@ -13,7 +13,7 @@ Two ways. The binary is the simpler one; Docker suits a machine you would rather
 
 ### The binary
 
-Download the one for your machine from the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest). A release is named after the wallet inside it: v2.66.272 is what the front note shows and what `marigold-cli --version` prints, so you can always tell whether you are on the latest.
+Download the one for your machine from the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest). A release is named after the wallet inside it: v2.67.276 is what the front note shows and what `marigold-cli --version` prints, so you can always tell whether you are on the latest.
 
 | File | For |
 | --- | --- |
@@ -336,3 +336,7 @@ The image downloads the release binary rather than compiling anything, so buildi
 The same wallet with screens instead of commands. Install it the way you install anything: on Linux the `.deb` (Debian, Ubuntu and their relatives) or the `.AppImage` (any distribution, mark it executable and start it); on macOS the `.dmg`, drag Marigold to Applications; on Windows the `.msi`. Each is on the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest) as `marigold-wallet-<version>-<platform>`, the same version as the terminal wallet; the bare `marigold-wallet-<platform>` binaries are there too for anyone who prefers them. The installers are unsigned: macOS asks you to allow the app once (right-click, Open), Windows shows its "unknown publisher" screen.
 
 In the app: create a wallet (the 24 words are shown once, to write down) or restore one from its words, or open the wallets the terminal wallet made; see the balance and history; paste any code and the app tells you what it is before anything happens (a request to pay, notes handed to you, a receipt) and pays or takes; request with a QR code and see "Paid" when the money lands; hand notes over as a code, plain or locked to one person's share key for a chosen time; mine with spare CPU once your own sync is done. On Linux the app needs WebKitGTK 4.1, which every GNOME desktop has and which the `.deb` pulls in; Windows 10 and 11 and macOS need nothing extra.
+
+## Backups as Telegram messages
+
+The terminal wallet can post its encrypted backup to a private Telegram group through the wallet's bot, in parts, and bring it back from there: `backup telegram <group id>` the first time (the id as Telegram shows it), `backup telegram` after that; on any machine, `wallet restore telegram` asks for the bot's token and waits for the part messages you forward to the bot, then restores the wallet against the backup passphrase. Details in the source repository's WALLET.md.
