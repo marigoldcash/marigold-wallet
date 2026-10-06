@@ -2,7 +2,7 @@
 
 Digital cash in fixed-denomination bearer notes. This repository is where you get the wallet without building anything: a binary for your machine from the [releases](https://github.com/marigoldcash/marigold-wallet/releases), or a Docker image that fetches one for you.
 
-The wallet is built from the [Marigold source](https://github.com/marigoldcash/marigold), which is public. Every release here is cut from that code base at the same tag: v2.73.310 here is [v2.73.310 there](https://github.com/marigoldcash/marigold/tree/v2.73.310), one number for the wallet, its release and its source. And the per-platform binaries on it are built by that repository's [Wallet binaries](https://github.com/marigoldcash/marigold/actions/workflows/binaries.yaml) GitHub Actions workflow on GitHub's own Linux, Windows and macOS runners, so what you download was compiled from the source you can read, on a machine nobody here controls.
+The wallet is built from the [Marigold source](https://github.com/marigoldcash/marigold), which is public. Every release here is cut from that code base at the same tag: v2.74.312 here is [v2.74.312 there](https://github.com/marigoldcash/marigold/tree/v2.74.312), one number for the wallet, its release and its source. And the per-platform binaries on it are built by that repository's [Wallet binaries](https://github.com/marigoldcash/marigold/actions/workflows/binaries.yaml) GitHub Actions workflow on GitHub's own Linux, Windows and macOS runners, so what you download was compiled from the source you can read, on a machine nobody here controls.
 
 **Testnet only.** The money is worthless by design and the network may be reset
 without notice.
@@ -13,7 +13,7 @@ Two ways. The binary is the simpler one; Docker suits a machine you would rather
 
 ### The binary
 
-Download the one for your machine from the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest). A release is named after the wallet inside it: v2.73.310 is what the front note shows and what `marigold-cli --version` prints, so you can always tell whether you are on the latest.
+Download the one for your machine from the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest). A release is named after the wallet inside it: v2.74.312 is what the front note shows and what `marigold-cli --version` prints, so you can always tell whether you are on the latest.
 
 | File | For |
 | --- | --- |
@@ -88,7 +88,7 @@ Most people never need the ledger. Notes are paid and received directly:
 were given, `request` prints a code for whoever is paying you, and
 `exchange <address> <amount>` pays anyone who only has an address, straight
 from your notes in one transaction. Answer **n** to the wizard's question and
-the wallet has a vault and nothing else — no ledger address is ever derived.
+the wallet holds notes and nothing else — no ledger address is ever derived.
 
 A ledger is for two things: mining, and being paid by an exchange that only
 pays to an address. Keep one (the default), or add it later with
@@ -144,8 +144,8 @@ back; the choice is remembered.
 ## Your notes live in `~/.marigold`
 
 The same folder the native wallet uses, so there is one set of keys on this
-machine rather than two. It holds your wallet file and your note vault — **which
-is your money** — in an ordinary directory you can see, copy, and include in
+machine rather than two. It holds your wallet's keys and its notes — **which
+are your money** — in an ordinary directory you can see, copy, and include in
 whatever you already back up.
 
 The container runs as whoever owns that folder on your machine, so the files
@@ -199,24 +199,24 @@ Back it up from inside the wallet:
 wallet backup /data/marigold-backup.mgb
 ```
 
-That writes everything — the wallet, the note vault, every note key — into one
-file, encrypted under a passphrase you choose there and then. It is safe to
-keep somewhere you do not control: a cloud drive, a chat with yourself, a USB
-stick that is not yours. `wallet restore <file>` rebuilds it anywhere, and it
-needs that passphrase and nothing else.
+That writes everything — every wallet on this computer, keys and every note
+— into one file, each wallet sealed with its own 24 words. It is safe to keep
+somewhere you do not control: a cloud drive, a chat with yourself, a USB stick
+that is not yours. `wallet restore <file>` rebuilds it anywhere, and it needs
+the words and nothing else — never a password.
 
 The file lands in `~/.marigold/marigold-backup.mgb`, on your own disk — nothing
 to copy out of a volume.
 
-Anyone with that file and its passphrase can spend your money. Treat it as
-cash — which is what it is.
+Anyone with that file and a wallet's words can spend that wallet's money.
+Treat it as cash — which is what it is.
 
-Your password and that backup are what bring the wallet back. Nothing else
-can, and there is nobody to appeal to. Prefer paper? `note vault words` prints
-24 recovery words that, together with a copy of the vault files, rebuild the
-wallet without the password — the words alone recover your ledger balance and
-**none of your notes**, because nothing can derive a note, which is exactly
-what makes it cash.
+Your 24 words and that backup are what bring the wallet back. Nothing else
+can, and there is nobody to appeal to. `words` prints the 24 words again for
+paper; the words alone recover your ledger balance and **none of your notes**,
+because nothing can derive a note, which is exactly what makes it cash. The
+wallet can also keep the backup current for you in your own Telegram bot's
+chat (`telegram backup`).
 
 ## Asking for a code before it spends
 
@@ -233,7 +233,7 @@ file: the code's secret lives inside that file under the same password, so
 whoever has both can generate their own codes. Your password and your
 twenty-four words are still what stands between a thief and your money.
 
-Turning it off takes a current code, or your twenty-four vault words if the
+Turning it off takes a current code, or your twenty-four words if the
 phone is gone.
 
 ## Mining with spare CPU
