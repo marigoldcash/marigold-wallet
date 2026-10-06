@@ -117,7 +117,7 @@ receive <code>
 
 `request` prints a code for whoever is paying you and waits for the money;
 `history` lists what you have paid and received; `move 500` moves notes into
-another wallet on this machine; `mobile` puts notes on your phone.
+another wallet on this machine; `telegram` makes your phone a remote control for it.
 
 ### The receipt
 
@@ -284,10 +284,10 @@ and gives you the code it prints. The money is theirs to send and yours alone to
 
 ## Your wallet on your phone: a Telegram bot
 
-The phone is a remote; the wallet stays at home. Make a bot of your own in Telegram (BotFather, `/newbot`, copy the token), then in your wallet:
+The phone is a remote; the wallet stays at home. Make a bot of your own in Telegram (BotFather, `/newbot`, copy the token — <https://marigold.cash/faq> walks through it step by step), then in your wallet:
 
 ```
-mobile telegram <token>
+telegram link <token>
 ```
 
 It asks for a PIN the bot will want before paying, and shows a pairing code. From then on the bot is answered whenever that wallet is open: in your normal terminal session, for as long as it stays open, or with no terminal at all as a service, with the password in a file only you can read:
@@ -297,7 +297,7 @@ umask 077; echo "your wallet password" > ~/.marigold/wallet.pw
 marigold-cli serve <wallet name> --password-file ~/.marigold/wallet.pw
 ```
 
-Send your bot `/start <pairing code>` once. From then on, in that chat: `/balance`, `/pay 5` (asks the PIN, answers with a code to hand over), `/receive <code>` or simply paste any code you were given, `/request 5`, `/history`, `/status`. One Telegram user is paired; everyone else is ignored. There is a daily limit, 100 by default, `mobile telegram limit <amount>` changes it. Three wrong PINs lock the bot until the service restarts.
+Send your bot `/start <pairing code>` once. From then on, in that chat: `/balance`, `/pay 5` (asks the PIN, answers with a code to hand over), `/receive <code>` or simply paste any code you were given, `/request 5`, `/history`, `/status`. One Telegram user is paired; everyone else is ignored. There is a daily limit, 100 by default; `telegram limit <amount>` changes it. Three wrong PINs lock the bot until `telegram unlock` in the wallet. `telegram` alone shows where things stand: who is paired, the limit, and the state of the backup.
 
 The service runs in the foreground and logs to stdout; [systemd/marigold-wallet.service](systemd/marigold-wallet.service) is a unit to copy. `--mine 50` on the same command mines to the wallet's own address too. This is a hot wallet on that machine: whoever can read the password file can spend. Turn on two-step verification in Telegram, since the paired account now moves money and Telegram accounts recover by SMS otherwise.
 
@@ -337,6 +337,8 @@ The same wallet with screens instead of commands. Install it the way you install
 
 In the app: create a wallet (the 24 words are shown once, to write down) or restore one from its words, or open the wallets the terminal wallet made; see the balance and history; paste any code and the app tells you what it is before anything happens (a request to pay, notes handed to you, a receipt) and pays or takes; request with a QR code and see "Paid" when the money lands; hand notes over as a code, plain or locked to one person's share key for a chosen time; mine with spare CPU once your own sync is done. On Linux the app needs WebKitGTK 4.1, which every GNOME desktop has and which the `.deb` pulls in; Windows 10 and 11 and macOS need nothing extra.
 
-## Backups as Telegram messages
+## Backups, kept current by the wallet itself
 
-The terminal wallet can post its encrypted backup to a private Telegram group through the wallet's bot, in parts, and bring it back from there: `backup telegram <group id>` the first time (the id as Telegram shows it), `backup telegram` after that; on any machine, `wallet restore telegram` asks for the bot's token and waits for the part messages you forward to the bot, then restores the wallet against the backup passphrase. Details in the source repository's WALLET.md.
+Once the bot is paired, the wallet asks once whether to back itself up automatically to the bot's chat — say yes. It posts an encrypted full copy there and keeps it current by itself while it is open: a full copy every week, the changes within minutes of a payment, silently. A dashed line goes before every full copy. `telegram backup` posts a copy now (and starts the automation if you said no); `telegram autobackup off` pauses it. `backup` writes the same encrypted copy to a file instead.
+
+Every backup opens with the wallet's 24 words and with nothing else — never with the wallet password, which is chosen to be remembered and could be tried at leisure on someone else's server. To bring the wallet back on another machine: `telegram restore` there, then forward the bot everything from the last dashed line in the chat to the end, and give the words. The desktop wallet has the same on its Backup tab and a "Restore one from Telegram" screen.
