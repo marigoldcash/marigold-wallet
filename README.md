@@ -2,7 +2,7 @@
 
 Digital cash in fixed-denomination bearer notes. This repository is where you get the wallet without building anything: a binary for your machine from the [releases](https://github.com/marigoldcash/marigold-wallet/releases), or a Docker image that fetches one for you.
 
-The wallet is built from the [Marigold source](https://github.com/marigoldcash/marigold), which is public. Every release here is cut from that code base at the same tag: v2.80.324 here is [v2.80.324 there](https://github.com/marigoldcash/marigold/tree/v2.80.324), one number for the wallet, its release and its source. And the per-platform binaries on it are built by that repository's [Wallet binaries](https://github.com/marigoldcash/marigold/actions/workflows/binaries.yaml) GitHub Actions workflow on GitHub's own Linux, Windows and macOS runners, so what you download was compiled from the source you can read, on a machine nobody here controls.
+The wallet is built from the [Marigold source](https://github.com/marigoldcash/marigold), which is public. Every release here is cut from that code base at the same tag: v2.81.326 here is [v2.81.326 there](https://github.com/marigoldcash/marigold/tree/v2.81.326), one number for the wallet, its release and its source. And the per-platform binaries on it are built by that repository's [Wallet binaries](https://github.com/marigoldcash/marigold/actions/workflows/binaries.yaml) GitHub Actions workflow on GitHub's own Linux, Windows and macOS runners, so what you download was compiled from the source you can read, on a machine nobody here controls.
 
 **Testnet only.** The money is worthless by design and the network may be reset
 without notice.
@@ -13,7 +13,7 @@ Two ways. The binary is the simpler one; Docker suits a machine you would rather
 
 ### The binary
 
-Download the one for your machine from the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest). A release is named after the wallet inside it: v2.80.324 is what the front note shows and what `marigold-cli --version` prints, so you can always tell whether you are on the latest.
+Download the one for your machine from the [latest release](https://github.com/marigoldcash/marigold-wallet/releases/latest). A release is named after the wallet inside it: v2.81.326 is what the front note shows and what `marigold-cli --version` prints, so you can always tell whether you are on the latest.
 
 From then on the wallet keeps itself current: once a day it checks for a newer release and says so, and `update` installs it — the file is downloaded from the release, checked against digests a quorum of the trustees signed, put in place of the running program (the old one stays beside it as `marigold-cli.old`) and started again. It asks before it installs, and closes an open wallet first the way `close` does. In Docker, `docker pull` does the same job.
 
@@ -342,5 +342,7 @@ In the app: create a wallet (the 24 words are shown once, to write down) or rest
 ## Backups, kept current by the wallet itself
 
 Once the bot is paired, the wallet asks once whether to back itself up automatically to the bot's chat — say yes. It posts an encrypted full copy there and keeps it current by itself while it is open: a full copy every day, the changes within minutes of a payment, silently, only the last two full copies kept in the chat. A dashed line goes before every full copy. `telegram backup` posts a copy now (and starts the automation if you said no); `telegram autobackup off` pauses it. `backup` writes the same encrypted copy to a file instead.
+
+The same backups can go to a folder on this computer as well — one your cloud service mirrors, so the copy leaves the machine the moment it is written: `backup folder <path>` sets it, writes the first full copy, and keeps the folder current the way the chat is kept, the last two full copies and their changes. `wallet restore <that folder>` brings it back anywhere, with the words.
 
 Every backup opens with the wallet's 24 words and with nothing else — never with the wallet password, which is chosen to be remembered and could be tried at leisure on someone else's server. To bring the wallet back on another machine: `telegram restore` there, then forward the bot everything from the last dashed line in the chat to the end, and give the words. The desktop wallet has the same on its Backup tab and a "Restore one from Telegram" screen.
