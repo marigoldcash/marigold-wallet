@@ -67,12 +67,12 @@ first time, `open` after that. It asks for a name and a password, and one
 question worth a pause — **Keep a ledger account too? [Y/n]**. Then
 `connect`.
 
-`connect` asks how: **1**, a public computer while your own copy of the
-network downloads, for privacy — the recommended choice, and the wallet moves
-over to your own copy once it has caught up; or **2**, your own copy only, no
-public computer at any point. Your own copy means nobody else sees which notes
-you ask about; the first download takes a while, and until it has caught up
-nothing on the ledger can be seen or paid. The choice is remembered. Get some
+`connect` asks how: **1**, a public computer while your own copy downloads,
+for privacy — the light wallet, the recommended choice: the chain comes from a
+public computer, the notes from a copy of the pool the wallet keeps itself,
+checked against the trustees' anchors, so nobody is asked which notes are
+yours; or **2**, your own copy without a public computer — a full node of
+your own, slow at first and the way to mine. The choice is remembered. Get some
 testnet money at <https://faucet.marigold.cash>, and type `guide` for a
 walkthrough that reads the state of your wallet and only tells you what
 applies to you.
