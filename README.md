@@ -67,10 +67,12 @@ first time, `open` after that. It asks for a name and a password, and one
 question worth a pause — **Keep a ledger account too? [Y/n]**. Then
 `connect`.
 
-`connect` starts syncing a copy of the network on this machine — nobody else
-then sees which notes you ask about. The first sync takes a while, and until
-it has caught up nothing can be seen or paid, so the wallet asks once whether
-to use a public computer meanwhile; it never does that unasked. Get some
+`connect` asks how: **1**, a public computer while your own copy of the
+network downloads, for privacy — the recommended choice, and the wallet moves
+over to your own copy once it has caught up; or **2**, your own copy only, no
+public computer at any point. Your own copy means nobody else sees which notes
+you ask about; the first download takes a while, and until it has caught up
+nothing on the ledger can be seen or paid. The choice is remembered. Get some
 testnet money at <https://faucet.marigold.cash>, and type `guide` for a
 walkthrough that reads the state of your wallet and only tells you what
 applies to you.
@@ -313,8 +315,9 @@ syncs a copy of the network on this machine. Nobody then sees your address or
 which notes you hold — with a public computer, its operator does. It takes a
 while to catch up and several gigabytes of disk; `connect status` shows
 progress, `disconnect` stops it. See <https://marigold.cash/faq> for what the
-choice actually costs. `connect public` uses a public computer instead, for
-whoever wants that.
+choice actually costs. `connect` alone asks whether a public computer should
+be used while the copy downloads (the recommended choice) or not at all;
+`connect public` uses a public computer only, for whoever wants that.
 
 The compose file publishes port 26211 so your copy of the network can accept peers.
 
