@@ -33,7 +33,7 @@ chmod +x marigold-cli-linux-x86_64
 ./marigold-cli-linux-x86_64
 ```
 
-The binaries are unsigned. A Mac stops the first launch: allow it under System Settings, Privacy and Security, then run it again. Windows shows a SmartScreen notice; More info, then Run anyway. That is the price of not paying Apple and Microsoft for certificates while this is a testnet.
+The binaries are unsigned. A Mac stops the first launch: allow it under System Settings, Privacy and Security, then run it again. Windows shows a SmartScreen notice; More info, then Run anyway. That is the price of not paying Apple and Microsoft for certificates while this is a testnet. On Windows, run the wallet from an ordinary PowerShell or terminal as yourself: `update` replaces the program in your own folder and needs no administrator (since v2.90; before it, a second update in a row failed with "access refused").
 
 The wallet keeps everything in `~/.marigold`, the same folder Docker uses, so you can switch between the two later. Then carry on at *In the wallet* below.
 
